@@ -35,10 +35,8 @@ app.layout = html.Div([
                             "text-align": "center"
                         },
                         children=[
-                            html.H4("""
-                        Have you ever wonder how bad can people make plots?
-                        Very bad.
-                        """),
+                            html.H4("Have you ever wondered how bad can people make plots?"),
+                            html.H4("Shockingly, very bad."),
                             html.Button(
                                 id="start-button",
                                 children="Check it out"
@@ -90,29 +88,43 @@ app.layout = html.Div([
                                 children=[
                                     dbc.Col(
                                         children=[
-                                            dbc.Card([
-                                                html.H3(
-                                                    id="title",
-                                                    className="card-title"
-                                                ),
-                                                html.P(
-                                                    id="desc",
-                                                    className="card-text"
-                                                ),
-                                                dbc.Row(
-                                                    children=[
-                                                        html.H4("Bad 👎🏼", id="bad-header"),
-                                                        daq.ToggleSwitch(
-                                                            id="plot-switch",
-                                                            style=dict(width="100px"),
-                                                            value=False
-                                                        ),
-                                                        html.H4("Good 👌🏼", id="good-header")
-                                                    ],
-                                                    align="center",
-                                                    justify="center"
-                                                )
-                                            ],
+                                            dbc.Card(
+                                                style=dict(padding="40px"),
+                                                children=[
+                                                    html.H3(
+                                                        id="title",
+                                                        className="card-title"
+                                                    ),
+                                                    html.P(
+                                                        id="desc",
+                                                        className="card-text"
+                                                    ),
+                                                    html.H6("""
+                                                        You think is not that bad?
+                                                        Let's find out.
+                                                        """
+                                                            ),
+                                                    html.Div(
+                                                        id="form",
+                                                        style={
+                                                            "padding": "10px",
+                                                            "padding-bottom": "30px"
+                                                        }
+                                                    ),
+                                                    dbc.Row(
+                                                        children=[
+                                                            html.H4("Bad 👎🏼", id="bad-header"),
+                                                            daq.ToggleSwitch(
+                                                                id="plot-switch",
+                                                                style=dict(width="100px"),
+                                                                value=False
+                                                            ),
+                                                            html.H4("Good 👌🏼", id="good-header")
+                                                        ],
+                                                        align="center",
+                                                        justify="center"
+                                                    )
+                                                ],
                                                 body=True
                                             )
                                         ],
@@ -151,6 +163,7 @@ def get_started(n_clicks):
     [
         Output("title", "children"),
         Output("desc", "children"),
+        Output("form", "children"),
         Output("plot", "figure")
     ],
     [
@@ -158,6 +171,18 @@ def get_started(n_clicks):
         Input("plot-switch", "value")
     ])
 def render_content(tab, good):
+    form_data = [
+        ("Is this a question?", "text", lambda ans: str.lower(ans).strip() == "yes"),
+        ("How you like it in 1-10 scale?", "number", lambda ans: ans == 10)
+    ]
+
+    form = [
+        dbc.FormGroup([
+            dbc.Label("{}. {}".format(nr + 1, data[0])),
+            dbc.Input(type=data[1], placeholder="Put your answer here...")
+        ])
+        for nr, data in enumerate(form_data)
+    ]
     return [
         "Title",
         """
@@ -166,6 +191,7 @@ def render_content(tab, good):
         Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
         Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         """,
+        form,
         {
             'data': [
                 {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
