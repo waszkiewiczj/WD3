@@ -83,25 +83,42 @@ app.layout = html.Div([
                     html.Div(
                         id='tabs-content',
                         style={
-                            "padding": "20px"
+                            "padding": "40px"
                         },
                         children=[
                             dbc.Row(
                                 children=[
-                                    html.H4("Good plot", id="good-header"),
-                                    daq.ToggleSwitch(
-                                        id="plot-switch",
-                                        style=dict(width="100px")
+                                    dbc.Col(
+                                        children=[
+                                            dbc.Card([
+                                                html.H3(
+                                                    id="title",
+                                                    className="card-title"
+                                                ),
+                                                html.P(
+                                                    id="desc",
+                                                    className="card-text"
+                                                ),
+                                                dbc.Row(
+                                                    children=[
+                                                        html.H4("Bad 👎🏼", id="bad-header"),
+                                                        daq.ToggleSwitch(
+                                                            id="plot-switch",
+                                                            style=dict(width="100px"),
+                                                            value=False
+                                                        ),
+                                                        html.H4("Good 👌🏼", id="good-header")
+                                                    ],
+                                                    align="center",
+                                                    justify="center"
+                                                )
+                                            ],
+                                                body=True
+                                            )
+                                        ],
+                                        md=4
                                     ),
-                                    html.H4("Bad plot", id="bad-header")
-                                ],
-                                align="center",
-                                justify="center"
-                            ),
-                            dbc.Row(
-                                children=[
-                                    dbc.Col(dcc.Graph(id="bad-plot"), md=6),
-                                    dbc.Col(dcc.Graph(id="good-plot"), md=6)
+                                    dbc.Col(dcc.Graph(id="plot"), md=8)
                                 ]
                             )
                         ]
@@ -132,37 +149,49 @@ def get_started(n_clicks):
 
 @app.callback(
     [
+        Output("title", "children"),
+        Output("desc", "children"),
+        Output("plot", "figure")
+    ],
+    [
+        Input('tabs', 'value'),
+        Input("plot-switch", "value")
+    ])
+def render_content(tab, good):
+    return [
+        "Title",
+        """
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        """,
+        {
+            'data': [
+                {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
+                {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': u'Montréal'},
+            ],
+            'layout': {
+                'title': 'Dash Data Visualization'
+            }
+        }
+    ]
+
+
+@app.callback(
+    [
         Output("bad-header", "style"),
         Output("good-header", "style"),
         Output("plot-switch", "color")
     ],
     [Input("plot-switch", "value")]
 )
-def switch_plot(bad):
-
+def switch_plot(good):
     return [
-        dict(color="red" if bad else "lightgrey"),
-        dict(color="lightgrey" if bad else "green"),
-        "red" if bad else "green"
+        dict(color="lightgrey" if good else "red"),
+        dict(color="green" if good else "lightgrey"),
+        "green" if good else "red"
     ]
-
-@app.callback(
-    [
-        Output("bad-plot", "figure"),
-        Output("good-plot", "figure")
-    ],
-    [Input('tabs', 'value')])
-def render_content(tab):
-    testfig = {
-        'data': [
-            {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
-            {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': u'Montréal'},
-        ],
-        'layout': {
-            'title': 'Dash Data Visualization'
-        }
-    }
-    return [testfig, testfig]
 
 
 if __name__ == '__main__':
