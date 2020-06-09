@@ -31,9 +31,7 @@ app.layout = html.Div([
                 className="section section-intro",
                 children=[
                     html.Div(
-                        style={
-                            "text-align": "center"
-                        },
+                        className="text-center",
                         children=[
                             html.H4("Have you ever wondered how bad can people make plots?"),
                             html.H4("Shockingly, very bad."),
@@ -80,16 +78,14 @@ app.layout = html.Div([
                     ),
                     html.Div(
                         id='tabs-content',
-                        style={
-                            "padding": "40px"
-                        },
+                        className="div-tab",
                         children=[
                             dbc.Row(
                                 children=[
                                     dbc.Col(
                                         children=[
                                             dbc.Card(
-                                                style=dict(padding="40px"),
+                                                className="mx-4",
                                                 children=[
                                                     html.H3(
                                                         id="title",
@@ -99,32 +95,19 @@ app.layout = html.Div([
                                                         id="desc",
                                                         className="card-text"
                                                     ),
-                                                    html.H6("""
-                                                        You think is not that bad?
-                                                        Let's find out.
-                                                        """
-                                                            ),
-                                                    html.Div(
-                                                        id="form",
-                                                        style={
-                                                            "padding": "10px",
-                                                        }
-                                                    ),
-                                                    html.Button(
-                                                        children="Check your answers!"
-                                                    )
+                                                    html.H6("You think is not that bad? Let's find out."),
+                                                    html.Div(id="form"),
+                                                    html.Button(children="Check your answers!")
                                                 ],
                                                 body=True
                                             )
                                         ],
-                                        md=4
+                                        width=4
                                     ),
                                     dbc.Col([
                                         dcc.Graph(id="plot"),
                                         html.Div(
-                                            style={
-                                                "text-align": "center"
-                                            },
+                                            className="text-center",
                                             children=[
                                                 "Switch to see ",
                                                 html.B("HOW IT'S DONE:")
@@ -135,7 +118,6 @@ app.layout = html.Div([
                                                 html.H4("Bad 👎🏼", id="bad-header"),
                                                 daq.ToggleSwitch(
                                                     id="plot-switch",
-                                                    style=dict(width="100px"),
                                                     value=False
                                                 ),
                                                 html.H4("Good 👌🏼", id="good-header")
@@ -143,7 +125,7 @@ app.layout = html.Div([
                                             align="center",
                                             justify="center"
                                         )
-                                    ], md=8)
+                                    ], width=8)
                                 ]
                             )
                         ]
