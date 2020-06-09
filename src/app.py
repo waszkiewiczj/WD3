@@ -47,9 +47,12 @@ app.layout = html.Div([
                 id="plots",
                 className="section",
                 children=[
-                    html.H1(children='CHOOSE PLOT'),
+                    html.H3(
+                        className="header-center",
+                        children="Choose plot you want to see. Even if it is ugly as... you know."
+                    ),
                     dcc.Tabs(
-                        id="tabs-with-classes",
+                        id="tabs",
                         value='tab1',
                         children=[
                             dcc.Tab(
@@ -68,8 +71,13 @@ app.layout = html.Div([
                                 label='Tab four',
                                 value='tab4'
                             ),
+                            dcc.Tab(
+                                label='Tab five',
+                                value='tab5'
+                            )
                         ]
-                    )
+                    ),
+                    html.Div(id='tabs-content')
                 ]
             ),
             html.Div(id='scroll-blocker', className='scroll'),
@@ -92,6 +100,31 @@ app.layout = html.Div([
 )
 def get_started(n_clicks):
     return "#0" if n_clicks is None else "#1"
+
+
+@app.callback(Output('tabs-content', 'children'),
+              [Input('tabs', 'value')])
+def render_content(tab):
+    if tab == 'tab1':
+        return html.Div([
+            html.H3('Tab content 1')
+        ])
+    elif tab == 'tab2':
+        return html.Div([
+            html.H3('Tab content 2')
+        ])
+    elif tab == 'tab3':
+        return html.Div([
+            html.H3('Tab content 3')
+        ])
+    elif tab == 'tab4':
+        return html.Div([
+            html.H3('Tab content 4')
+        ])
+    elif tab == 'tab5':
+        return html.Div([
+            html.H3('Tab content 5')
+        ])
 
 
 if __name__ == '__main__':
