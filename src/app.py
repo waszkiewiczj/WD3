@@ -3,6 +3,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
+import dash_daq as daq
 from dash.dependencies import Output, Input
 import visdcc
 
@@ -81,7 +82,22 @@ app.layout = html.Div([
                     ),
                     html.Div(
                         id='tabs-content',
+                        style={
+                            "padding": "20px"
+                        },
                         children=[
+                            dbc.Row(
+                                children=[
+                                    html.H4("Good plot", id="good-header"),
+                                    daq.ToggleSwitch(
+                                        id="plot-switch",
+                                        style=dict(width="100px")
+                                    ),
+                                    html.H4("Bad plot", id="bad-header")
+                                ],
+                                align="center",
+                                justify="center"
+                            ),
                             dbc.Row(
                                 children=[
                                     dbc.Col(dcc.Graph(id="bad-plot"), md=6),
@@ -113,6 +129,22 @@ app.layout = html.Div([
 def get_started(n_clicks):
     return "#0" if n_clicks is None else "#1"
 
+
+@app.callback(
+    [
+        Output("bad-header", "style"),
+        Output("good-header", "style"),
+        Output("plot-switch", "color")
+    ],
+    [Input("plot-switch", "value")]
+)
+def switch_plot(bad):
+
+    return [
+        dict(color="red" if bad else "lightgrey"),
+        dict(color="lightgrey" if bad else "green"),
+        "red" if bad else "green"
+    ]
 
 @app.callback(
     [
