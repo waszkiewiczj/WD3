@@ -6,6 +6,7 @@ import dash_bootstrap_components as dbc
 import dash_daq as daq
 from dash.dependencies import Output, Input
 import visdcc
+import tabs
 
 external_stylesheets = [
     dbc.themes.BOOTSTRAP,
@@ -118,6 +119,7 @@ app.layout = html.Div([
                                                 html.H4("Bad 👎🏼", id="bad-header"),
                                                 daq.ToggleSwitch(
                                                     id="plot-switch",
+                                                    className="switch",
                                                     value=False
                                                 ),
                                                 html.H4("Good 👌🏼", id="good-header")
@@ -166,37 +168,12 @@ def get_started(n_clicks):
         Input("plot-switch", "value")
     ])
 def render_content(tab, good):
-    form_data = [
-        ("Is this a question?", "text"),
-        ("How you like it in 1-10 scale?", "number"),
-        ("How are you?", "text"),
-        ("Is this real?", "text"),
-        ("Why?", "text")
-    ]
-
-    form = [
-        dbc.FormGroup([
-            dbc.Label("{}. {}".format(nr + 1, data[0])),
-            dbc.Input(type=data[1], placeholder="Put your answer here...")
-        ])
-        for nr, data in enumerate(form_data)
-    ]
+    content = tabs.ExampleTabContent()
     return [
-        "Title",
-        """
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-        """,
-        form,
-        {
-            'data': [
-                {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
-                {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': u'Montréal'},
-            ],
-            'layout': {
-                'title': 'Dash Data Visualization'
-            }
-        }
+        content.get_title(),
+        content.get_desc(),
+        content.get_form(),
+        content.get_good_figure() if good else content.get_bad_figure()
     ]
 
 
