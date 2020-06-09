@@ -6,7 +6,7 @@ from dash.dependencies import Output, Input
 import visdcc
 
 external_stylesheets = [
-    'https://codepen.io/chriddyp/pen/bWLwgP.css'
+    "https://codepen.io/chriddyp/pen/bWLwgP.css"
 ]
 
 external_scripts = []
@@ -22,19 +22,29 @@ app.layout = html.Div([
         id="main",
         className="scroll-container",
         children=[
+            dcc.Location(id="loc"),
             html.Section(
-                id="intro-section",
-                className="section",
+                id="intro",
+                className="section section-intro",
                 children=[
-                    html.Button(
-                        id="start-button",
-                        children="Get started"
-                    ),
-                    dcc.Location(id="loc")
+                    html.Div(
+                        style={
+                            "text-align": "center"
+                        },
+                        children=[
+                            html.H4("""
+                        Have you ever wonder how bad can people make plots?
+                        Very bad.
+                        """),
+                            html.Button(
+                                id="start-button",
+                                children="Check it out"
+                            )
+                        ])
                 ]
             ),
             html.Section(
-                id="main-section",
+                id="plots",
                 className="section",
                 children=[
                     html.H1(children='CHOOSE PLOT'),
@@ -68,7 +78,7 @@ app.layout = html.Div([
                   run='''
                         new fullScroll({
                             mainElement: "main",
-                            sections: ["intro-section", "main-section"],
+                            sections: ["intro", "plots"],
                             displayDots: false
                           });
                         '''
