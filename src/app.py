@@ -108,21 +108,10 @@ app.layout = html.Div([
                                                         id="form",
                                                         style={
                                                             "padding": "10px",
-                                                            "padding-bottom": "30px"
                                                         }
                                                     ),
-                                                    dbc.Row(
-                                                        children=[
-                                                            html.H4("Bad 👎🏼", id="bad-header"),
-                                                            daq.ToggleSwitch(
-                                                                id="plot-switch",
-                                                                style=dict(width="100px"),
-                                                                value=False
-                                                            ),
-                                                            html.H4("Good 👌🏼", id="good-header")
-                                                        ],
-                                                        align="center",
-                                                        justify="center"
+                                                    html.Button(
+                                                        children="Check your answers!"
                                                     )
                                                 ],
                                                 body=True
@@ -130,7 +119,31 @@ app.layout = html.Div([
                                         ],
                                         md=4
                                     ),
-                                    dbc.Col(dcc.Graph(id="plot"), md=8)
+                                    dbc.Col([
+                                        dcc.Graph(id="plot"),
+                                        html.Div(
+                                            style={
+                                                "text-align": "center"
+                                            },
+                                            children=[
+                                                "Switch to see ",
+                                                html.B("HOW IT'S DONE:")
+                                            ]
+                                        ),
+                                        dbc.Row(
+                                            children=[
+                                                html.H4("Bad 👎🏼", id="bad-header"),
+                                                daq.ToggleSwitch(
+                                                    id="plot-switch",
+                                                    style=dict(width="100px"),
+                                                    value=False
+                                                ),
+                                                html.H4("Good 👌🏼", id="good-header")
+                                            ],
+                                            align="center",
+                                            justify="center"
+                                        )
+                                    ], md=8)
                                 ]
                             )
                         ]
@@ -172,8 +185,11 @@ def get_started(n_clicks):
     ])
 def render_content(tab, good):
     form_data = [
-        ("Is this a question?", "text", lambda ans: str.lower(ans).strip() == "yes"),
-        ("How you like it in 1-10 scale?", "number", lambda ans: ans == 10)
+        ("Is this a question?", "text"),
+        ("How you like it in 1-10 scale?", "number"),
+        ("How are you?", "text"),
+        ("Is this real?", "text"),
+        ("Why?", "text")
     ]
 
     form = [
@@ -188,8 +204,6 @@ def render_content(tab, good):
         """
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
         Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         """,
         form,
         {
