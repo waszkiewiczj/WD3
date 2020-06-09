@@ -2,10 +2,12 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_bootstrap_components as dbc
 from dash.dependencies import Output, Input
 import visdcc
 
 external_stylesheets = [
+    dbc.themes.BOOTSTRAP,
     "https://codepen.io/chriddyp/pen/bWLwgP.css"
 ]
 
@@ -77,7 +79,17 @@ app.layout = html.Div([
                             )
                         ]
                     ),
-                    html.Div(id='tabs-content')
+                    html.Div(
+                        id='tabs-content',
+                        children=[
+                            dbc.Row(
+                                children=[
+                                    dbc.Col(dcc.Graph(id="bad-plot"), md=6),
+                                    dbc.Col(dcc.Graph(id="good-plot"), md=6)
+                                ]
+                            )
+                        ]
+                    )
                 ]
             ),
             html.Div(id='scroll-blocker', className='scroll'),
@@ -102,29 +114,23 @@ def get_started(n_clicks):
     return "#0" if n_clicks is None else "#1"
 
 
-@app.callback(Output('tabs-content', 'children'),
-              [Input('tabs', 'value')])
+@app.callback(
+    [
+        Output("bad-plot", "figure"),
+        Output("good-plot", "figure")
+    ],
+    [Input('tabs', 'value')])
 def render_content(tab):
-    if tab == 'tab1':
-        return html.Div([
-            html.H3('Tab content 1')
-        ])
-    elif tab == 'tab2':
-        return html.Div([
-            html.H3('Tab content 2')
-        ])
-    elif tab == 'tab3':
-        return html.Div([
-            html.H3('Tab content 3')
-        ])
-    elif tab == 'tab4':
-        return html.Div([
-            html.H3('Tab content 4')
-        ])
-    elif tab == 'tab5':
-        return html.Div([
-            html.H3('Tab content 5')
-        ])
+    testfig = {
+        'data': [
+            {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
+            {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': u'Montréal'},
+        ],
+        'layout': {
+            'title': 'Dash Data Visualization'
+        }
+    }
+    return [testfig, testfig]
 
 
 if __name__ == '__main__':
