@@ -171,7 +171,10 @@ def get_started(n_clicks):
         Input("plot-switch", "value")
     ])
 def render_content(tab, good):
-    content = tabs.ExampleTabContent()
+    if tab == 'tab1':
+        content = tabs.StatesTabContent()
+    else:
+        content = tabs.ExampleTabContent()
     form = [
         dbc.FormGroup([
             dbc.Label("{}. {}".format(nr + 1, data[0])),
