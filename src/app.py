@@ -4,7 +4,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 import dash_daq as daq
-from dash.dependencies import Output, Input
+from dash.dependencies import Output, Input, State, MATCH
 import visdcc
 import tabs
 
@@ -98,7 +98,10 @@ app.layout = html.Div([
                                                     ),
                                                     html.H6("You think is not that bad? Let's find out."),
                                                     html.Div(id="form"),
-                                                    html.Button(children="Check your answers!")
+                                                    html.Button(
+                                                        id="check-button",
+                                                        children="Check your answers!"
+                                                    )
                                                 ],
                                                 body=True
                                             )
@@ -169,12 +172,53 @@ def get_started(n_clicks):
     ])
 def render_content(tab, good):
     content = tabs.ExampleTabContent()
+    form = [
+        dbc.FormGroup([
+            dbc.Label("{}. {}".format(nr + 1, data[0])),
+            dbc.Input(
+                id={
+                    'type': 'form-input',
+                    'index': nr
+                },
+                type="text",
+                placeholder="Put your answer here..."
+            ),
+            dcc.Store(
+                id={
+                    'type': 'form-answer',
+                    'index': nr
+                },
+                data=data[1]
+            )
+        ])
+        for nr, data in enumerate(content.get_form_data())
+    ]
     return [
         content.get_title(),
         content.get_desc(),
-        content.get_form(),
+        form,
         content.get_good_figure() if good else content.get_bad_figure()
     ]
+
+
+@app.callback(
+    [
+        Output({'type': 'form-input', 'index': MATCH}, 'valid'),
+        Output({'type': 'form-input', 'index': MATCH}, 'invalid'),
+    ],
+    [Input("check-button", "n_clicks")],
+    [
+        State({'type': 'form-input', 'index': MATCH}, 'value'),
+        State({'type': 'form-answer', 'index': MATCH}, 'data')
+    ]
+)
+def check_answer(n_clicks, given, true):
+    if n_clicks is None:
+        return None, None
+    if given is None:
+        return False, True
+    is_true = str.lower(given).lstrip() == str.lower(true).lstrip()
+    return is_true, not is_true
 
 
 @app.callback(

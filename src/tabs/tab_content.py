@@ -8,7 +8,7 @@ class TabContent:
     def get_desc(self):
         pass
 
-    def get_form(self):
+    def get_form_data(self):
         pass
 
     def get_bad_figure(self):
@@ -28,8 +28,8 @@ class ExampleTabContent(TabContent):
         Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
         """
 
-    def get_form(self):
-        form_data = [
+    def get_form_data(self):
+        return [
             ("Is this a question?", "text"),
             ("How you like it in 1-10 scale?", "number"),
             ("How are you?", "text"),
