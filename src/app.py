@@ -156,14 +156,12 @@ def get_started(n_clicks):
     [
         Output("title", "children"),
         Output("desc", "children"),
-        Output("form", "children"),
-        Output("plot", "figure")
+        Output("form", "children")
     ],
     [
-        Input('tabs', 'value'),
-        Input("plot-switch", "value")
+        Input('tabs', 'value')
     ])
-def render_content(tab, good):
+def render_content(tab):
     content = tabs_dict[tab][1]
     form = [
         dbc.FormGroup([
@@ -189,9 +187,20 @@ def render_content(tab, good):
     return [
         content.get_title(),
         content.get_desc(),
-        form,
-        content.get_good_figure() if good else content.get_bad_figure()
+        form
     ]
+
+
+@app.callback(
+    Output("plot", "figure"),
+    [
+        Input("plot-switch", "value"),
+        Input('tabs', 'value')
+    ]
+)
+def render_plot(good, tab):
+    content = tabs_dict[tab][1]
+    return content.get_good_figure() if good else content.get_bad_figure()
 
 
 @app.callback(
