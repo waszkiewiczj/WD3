@@ -6,7 +6,7 @@ import dash_bootstrap_components as dbc
 import dash_daq as daq
 from dash.dependencies import Output, Input, State, MATCH
 import visdcc
-import tabs
+import src.tabs as tabs
 
 external_stylesheets = [
     dbc.themes.BOOTSTRAP,
