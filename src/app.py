@@ -158,9 +158,8 @@ def get_started(n_clicks):
         Output("desc", "children"),
         Output("form", "children")
     ],
-    [
-        Input('tabs', 'value')
-    ])
+    [Input('tabs', 'value')]
+)
 def render_content(tab):
     content = tabs_dict[tab][1]
     form = [
@@ -169,7 +168,7 @@ def render_content(tab):
             dbc.Input(
                 id={
                     'type': 'form-input',
-                    'index': nr
+                    'index': "{}-q{}".format(tab, nr)
                 },
                 type="text",
                 placeholder="Put your answer here..."
@@ -177,7 +176,7 @@ def render_content(tab):
             dcc.Store(
                 id={
                     'type': 'form-answer',
-                    'index': nr
+                    'index': "{}-q{}".format(tab, nr)
                 },
                 data=data[1]
             )
