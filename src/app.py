@@ -102,7 +102,10 @@ app.layout = html.Div([
                                         width=4
                                     ),
                                     dbc.Col([
-                                        dcc.Graph(id="plot"),
+                                        dcc.Graph(
+                                            id="plot",
+                                            config=dict(staticPlot=True)
+                                        ),
                                         html.Div(
                                             className="text-center",
                                             children=[
