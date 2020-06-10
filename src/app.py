@@ -156,7 +156,8 @@ def get_started(n_clicks):
     [
         Output("title", "children"),
         Output("desc", "children"),
-        Output("form", "children")
+        Output("form", "children"),
+        Output("plot-switch", "value")
     ],
     [Input('tabs', 'value')]
 )
@@ -171,6 +172,8 @@ def render_content(tab):
                     'index': "{}-q{}".format(tab, nr)
                 },
                 type="text",
+                valid=None,
+                invalid=None,
                 placeholder="Put your answer here..."
             ),
             dcc.Store(
@@ -186,7 +189,8 @@ def render_content(tab):
     return [
         content.get_title(),
         content.get_desc(),
-        form
+        form,
+        False
     ]
 
 
