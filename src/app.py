@@ -218,10 +218,8 @@ def render_plot(good, tab):
     ]
 )
 def check_answer(n_clicks, given, true):
-    if n_clicks is None:
+    if n_clicks is None or given is None:
         return None, None
-    if given is None:
-        return False, True
     is_true = str.lower(given).lstrip() == str.lower(true).lstrip()
     return is_true, not is_true
 
