@@ -38,14 +38,6 @@ class ExampleTabContent(TabContent):
             ("Why?", "text")
         ]
 
-        return [
-            dbc.FormGroup([
-                dbc.Label("{}. {}".format(nr + 1, data[0])),
-                dbc.Input(type=data[1], placeholder="Put your answer here...")
-            ])
-            for nr, data in enumerate(form_data)
-        ]
-
     def get_bad_figure(self):
         return {
             'data': [
