@@ -15,6 +15,14 @@ external_stylesheets = [
 
 external_scripts = []
 
+tabs_dict = {
+    "tab1": ("Tab one", tabs.StatesTabContent()),
+    "tab2": ("Tab two", tabs.ExampleTabContent()),
+    "tab3": ("Tab three", tabs.ExampleTabContent()),
+    "tab4": ("Tab four", tabs.ExampleTabContent()),
+    "tab5": ("Tab five", tabs.ExampleTabContent())
+}
+
 app = dash.Dash(
     __name__,
     external_stylesheets=external_stylesheets,
@@ -53,28 +61,13 @@ app.layout = html.Div([
                     ),
                     dcc.Tabs(
                         id="tabs",
-                        value='tab1',
+                        value=list(tabs_dict.keys())[0],
                         children=[
                             dcc.Tab(
-                                label='Tab one',
-                                value='tab1',
-                            ),
-                            dcc.Tab(
-                                label='Tab two',
-                                value='tab2',
-                            ),
-                            dcc.Tab(
-                                label='Tab three',
-                                value='tab3'
-                            ),
-                            dcc.Tab(
-                                label='Tab four',
-                                value='tab4'
-                            ),
-                            dcc.Tab(
-                                label='Tab five',
-                                value='tab5'
+                                label=tab_data[0],
+                                value=tab_key,
                             )
+                            for tab_key, tab_data in tabs_dict.items()
                         ]
                     ),
                     html.Div(
@@ -171,10 +164,7 @@ def get_started(n_clicks):
         Input("plot-switch", "value")
     ])
 def render_content(tab, good):
-    if tab == 'tab1':
-        content = tabs.StatesTabContent()
-    else:
-        content = tabs.ExampleTabContent()
+    content = tabs_dict[tab][1]
     form = [
         dbc.FormGroup([
             dbc.Label("{}. {}".format(nr + 1, data[0])),
