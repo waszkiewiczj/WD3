@@ -4,7 +4,8 @@ import plotly.express as px
 import pandas as pd
 
 from src.tabs import TabContent
-
+import os
+THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 class OlympicTabContent(TabContent):
 
@@ -12,7 +13,7 @@ class OlympicTabContent(TabContent):
         self.data = self._read_data()
 
     def _read_data(self):
-        data = pd.read_csv('olympic.csv')
+        data = pd.read_csv(os.path.join(THIS_FOLDER, "olympic.csv"))
 
         # filter countries with less than 10 golden medals
         data.loc[data['count'] < 10, 'country'] = 'Other'
