@@ -16,11 +16,11 @@ external_stylesheets = [
 external_scripts = []
 
 tabs_dict = {
-    "tab1": ("Tab one", tabs.StatesTabContent()),
-    "tab2": ("Tab two", tabs.ExampleTabContent()),
-    "tab3": ("Tab three", tabs.ExampleTabContent()),
-    "tab4": ("Tab four", tabs.ExampleTabContent()),
-    "tab5": ("Tab five", tabs.ExampleTabContent())
+    "tab1": tabs.StatesTabContent(),
+    "tab2": tabs.ExampleTabContent(),
+    "tab3": tabs.ExampleTabContent(),
+    "tab4": tabs.ExampleTabContent(),
+    "tab5": tabs.ExampleTabContent()
 }
 
 app = dash.Dash(
@@ -64,7 +64,7 @@ app.layout = html.Div([
                         value=list(tabs_dict.keys())[0],
                         children=[
                             dcc.Tab(
-                                label=tab_data[0],
+                                label=tab_data.get_title(),
                                 value=tab_key,
                             )
                             for tab_key, tab_data in tabs_dict.items()
@@ -165,7 +165,7 @@ def get_started(n_clicks):
     [Input('tabs', 'value')]
 )
 def render_content(tab):
-    content = tabs_dict[tab][1]
+    content = tabs_dict[tab]
     form = [
         dbc.FormGroup([
             dbc.Label("{}. {}".format(nr + 1, data[0])),
@@ -205,7 +205,7 @@ def render_content(tab):
     ]
 )
 def render_plot(good, tab):
-    content = tabs_dict[tab][1]
+    content = tabs_dict[tab]
     return content.get_good_figure() if good else content.get_bad_figure()
 
 
