@@ -104,6 +104,7 @@ app.layout = html.Div([
                                     dbc.Col([
                                         dcc.Graph(
                                             id="plot",
+                                            className="graph",
                                             config=dict(staticPlot=True)
                                         ),
                                         html.Div(
