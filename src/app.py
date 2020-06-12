@@ -105,7 +105,8 @@ app.layout = html.Div([
                                         dcc.Graph(
                                             id="plot",
                                             className="graph",
-                                            config=dict(staticPlot=True)
+                                            config=dict(staticPlot=True),
+                                            responsive=True
                                         ),
                                         html.Div(
                                             className="text-center",
