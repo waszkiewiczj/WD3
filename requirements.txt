@@ -4,3 +4,4 @@ dash_daq==0.4.0
 visdcc==0.0.40
 pandas==1.0.4
 plotly==4.8.1
+numpy==1.18.0

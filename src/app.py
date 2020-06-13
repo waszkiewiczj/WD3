@@ -20,7 +20,7 @@ tabs_dict = {
     "tab2": tabs.OlympicTabContent(),
     "tab3": tabs.ExampleTabContent(),
     "tab4": tabs.ExampleTabContent(),
-    "tab5": tabs.ExampleTabContent()
+    "tab5": tabs.BrowsersTabContent()
 }
 
 app = dash.Dash(
@@ -105,7 +105,11 @@ app.layout = html.Div([
                                         dcc.Graph(
                                             id="plot",
                                             className="graph",
-                                            config=dict(staticPlot=True),
+                                            config=dict(
+                                                staticPlot=False,
+                                                displayModeBar=False,
+                                                responsive=True
+                                            ),
                                             responsive=True
                                         ),
                                         html.Div(
