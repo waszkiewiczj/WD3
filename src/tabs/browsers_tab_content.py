@@ -92,16 +92,29 @@ def bar3d(x, y, z):
 
 class BrowsersTabContent(TabContent):
     def __init__(self):
-        self.browsers = pd.read_csv(os.path.join(THIS_FOLDER, "browsers.csv")).iloc[:4, :5]
+        self.browsers = pd.read_csv(os.path.join(THIS_FOLDER, "browsers.csv")).iloc[:4, [0, -1, -2, -3, -4]]
+
         x = np.array(self.browsers.columns[1:])
         y = self.browsers["Browser"].to_numpy()
         z = self.browsers.iloc[:, 1:].to_numpy()
         self.bad_fig = bar3d(x, y, z)
         self.bad_fig.update_layout(
             scene=dict(
-                xaxis_title='year',
-                yaxis_title='browser',
+                xaxis_title='Year',
+                yaxis_title='Browser',
                 zaxis_title='% of market')
+        )
+
+        self.good_fig = px.bar(
+            self.browsers.melt(id_vars=["Browser"], var_name="year", value_name="perc"),
+            x="year",
+            y="perc",
+            color="Browser",
+            barmode="group"
+        )
+        self.good_fig.update_layout(
+            yaxis_title="% of market",
+            xaxis_title="Year"
         )
 
     def get_title(self):
@@ -109,22 +122,21 @@ class BrowsersTabContent(TabContent):
 
     def get_desc(self):
         return """
-        Desc
+        This is chart of percentage of market share of top 4 desktop browsers
+        for last 4 years.
+        Maybe showing it on 3D bar plot looks kinda cool,
+        but makes it very hard to compare or read.
         """
 
     def get_form_data(self):
-        return []
+        return [
+            ("Which browser was more popular in 2018? IE or Safari?", "IE"),
+            ("What % of market had Firefox in 2019 (rounded to 5%)?", "10%"),
+            ("Was % of market owned by Firefox in 2018 more or less than 10%? (yes or no)", "yes")
+        ]
 
     def get_bad_figure(self):
         return self.bad_fig
 
     def get_good_figure(self):
-        return {
-            'data': [
-                {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
-                {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': u'Montréal'},
-            ],
-            'layout': {
-                'title': 'GOOOD'
-            }
-        }
+        return self.good_fig
