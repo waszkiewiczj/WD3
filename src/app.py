@@ -18,7 +18,7 @@ external_scripts = []
 tabs_dict = {
     "tab1": tabs.StatesTabContent(),
     "tab2": tabs.OlympicTabContent(),
-    "tab3": tabs.ExampleTabContent(),
+    "tab3": tabs.CoronavirusTabContent(),
     "tab4": tabs.ExampleTabContent(),
     "tab5": tabs.ExampleTabContent()
 }
