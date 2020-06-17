@@ -19,7 +19,7 @@ tabs_dict = {
     "tab1": tabs.StatesTabContent(),
     "tab2": tabs.OlympicTabContent(),
     "tab3": tabs.CoronavirusTabContent(),
-    "tab4": tabs.FerilityTabContent(),
+    "tab4": tabs.FertilityTabContent(),
     "tab5": tabs.BrowsersTabContent()
 }
 

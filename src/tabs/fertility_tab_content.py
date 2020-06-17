@@ -2,6 +2,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 import pandas as pd
 import os
+import json
 
 from src.tabs.tab_content import TabContent
 
@@ -26,9 +27,9 @@ def lons_lats(geojson):
                 y2 = y
         return ((x1+x2)/2, (y1+y2)/2)
 
-        centers = list(map(get_center, geojson["features"]))
-        (lons, lats) = ([x[0] for x in centers], [x[1] for x in centers])
-        return (lons, lats)
+    centers = list(map(get_center, geojson["features"]))
+    (lons, lats) = ([x[0] for x in centers], [x[1] for x in centers])
+    return (lons, lats)
 
 class FertilityTabContent(TabContent):
     def get_title(self):
@@ -43,21 +44,21 @@ class FertilityTabContent(TabContent):
         return [
             ("Is fertility in Mazowieckie smaller than in Wielkopolskie", "No"),
             ("Is fertility in Łódzkie the smallest", "Yes"),
-            ("Is the biggest difference in fertility per voievodeship bigger than 0.3?", "No"),
+            ("Is the biggest difference in fertility per voievodeship bigger than 0.3?", "Yes"),
         ]
 
     def get_bad_figure(self):
-        with open("wojewodztwa.geojson",  encoding='utf-8') as file:
+        with open(os.path.join(THIS_FOLDER, "voivodeships.geojson"),  encoding='utf-8') as file:
             counties = json.load(file)
-        df_chloro = pd.read_csv("dzietnosc.csv")
+        df_chloro = pd.read_csv(os.path.join(THIS_FOLDER, "fertility.csv"))
         fig = px.choropleth(df_chloro, geojson=counties,
-                        color="dzietnosc",
-                        locations="wojewodztwo",
+                        color="fertility",
+                        locations="voivodeship",
                         color_continuous_scale=px.colors.diverging.Armyrose,
                         range_color=[0,3],
                         featureidkey="properties.nazwa",
                         projection="mercator",
-                        hover_data={'wojewodztwo': False, "dzietnosc": False},
+                        hover_data={'voivodeship': False, "fertility": False},
                         title="Fertility in Poland in 2017"
                         )
         fig.update_geos(fitbounds="locations", visible=False)
@@ -65,22 +66,22 @@ class FertilityTabContent(TabContent):
         return fig
 
     def get_good_figure(self):
-        with open("wojewodztwa.geojson",  encoding='utf-8') as file:
+        with open(os.path.join(THIS_FOLDER, "voivodeships.geojson"),  encoding='utf-8') as file:
             counties = json.load(file)
-        df_chloro = pd.read_csv("dzietnosc.csv")
+        df_chloro = pd.read_csv(os.path.join(THIS_FOLDER, "fertility.csv"))
         (lons, lats) = lons_lats(counties)
         df_scatter = pd.DataFrame(
             {"lon": lons,
             "lat": lats,
-            "dzietnosc": [str(x) for x in df_chloro["dzietnosc"]]})
+            "fertility": [str(x) for x in df_chloro["fertility"]]})
         fig = px.choropleth(df_chloro, geojson=counties,
-                        color="dzietnosc",
-                        locations="wojewodztwo",
+                        color="fertility",
+                        locations="voivodeship",
                         color_continuous_scale=px.colors.diverging.Armyrose,
                         featureidkey="properties.nazwa",
                         projection="mercator",
-                        hover_data={'wojewodztwo': True, "dzietnosc": True},
-                        labels={"wojewodztwo": "Voivodeship", "dzietnosc": "Fertility"},
+                        hover_data={'voivodeship': True, "fertility": True},
+                        labels={"voivodeship": "Voivodeship", "fertility": "Fertility"},
                         title="Fertility in Poland in 2017"
                         )
         fig.update_geos(fitbounds="locations", visible=False)
@@ -88,12 +89,12 @@ class FertilityTabContent(TabContent):
         fig.add_trace({
             "lat": df_scatter["lat"],
             "lon": df_scatter["lon"],
-            "text": df_scatter["dzietnosc"],
+            "text": df_scatter["fertility"],
             "mode": "text",
             "type": "scattergeo",
             "textfont": {
-                "size" : 16,
-                "color" : "#000000"
+                "size": 16,
+                "color": "#000000"
             }
         })
         return fig
